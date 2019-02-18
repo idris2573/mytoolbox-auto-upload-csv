@@ -1,5 +1,6 @@
 <?php
 
+
 //////////////////// API ////////////////////
 
 // https://mytoolbox.jcb-tools.co.uk/wp-json/csv/download
@@ -12,7 +13,8 @@ add_action( 'rest_api_init', function () {
 
 function download_csv( $request ) {
   // if(getUserIp() == '95.151.234.157' || getUserIp() == '167.98.89.236'){
-      export_csv();
+      // export_csv();
+      upload_file_via_ftp();
       return "";
   // }
 }
@@ -85,7 +87,7 @@ function export_csv(){
   $csv = getHeadersForCsv($headers);
 
   $csv = getDataForCsv($csv, $form_data, $headers);
-  echo $csv;
+  return $csv;
 
 }
 
@@ -108,7 +110,7 @@ function getHeadersForCsv($headers){
     }
   }
 
-  return $csv = substr($csv, 1).'<br>';
+  return $csv = substr($csv, 1)."\n";
 }
 
 function getDataForCsv($csv, $form_data, $headers){
@@ -122,7 +124,7 @@ function getDataForCsv($csv, $form_data, $headers){
       }
     }
 
-    $csv = $csv.substr($line, 1).'<br>';
+    $csv = $csv.substr($line, 1)."\n";
   }
 
   return str_replace('&quot;', '\'', $csv);

@@ -32,6 +32,16 @@ register_activation_hook( __file__, 'installer' );
 
 
 include('includes/functions.php');
+include('includes/cron.php');
 
 // deactivate plugin
 register_deactivation_hook( __FILE__, array( $autoUploadCSV, 'deactivate' ) );
+
+// unschedule event upon plugin deactivation
+function cronstarter_deactivate() {
+	// find out when the last event was scheduled
+	$timestamp = wp_next_scheduled ('csv_upload');
+	// unschedule previous event if any
+	wp_unschedule_event ($timestamp, 'csv_upload');
+}
+register_deactivation_hook (__FILE__, 'cronstarter_deactivate');
